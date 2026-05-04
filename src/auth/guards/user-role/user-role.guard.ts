@@ -1,7 +1,7 @@
+import { META_ROLES } from '@/auth/decorators/role-protected.decorator';
 import { User } from '@/users/entities/user.entity';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { forbidden } from 'joi';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -15,7 +15,11 @@ export class UserRoleGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
 
-   const validRoles:string[] = this.reflector.get('roles', context.getHandler());
+   const validRoles:string[] = this.reflector.get(META_ROLES, context.getHandler());
+
+   if( !validRoles || validRoles.length === 0) {
+    return true;
+   }
 
    const req = context.switchToHttp().getRequest();
    const user = req.user as User;
