@@ -1,44 +1,45 @@
+import { Business } from "@/businesses/entities/business.entity";
 import { Exclude } from "class-transformer";
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id:string;
+    id: string;
 
     @Column({
-        type:'varchar',
-        length:50
+        type: 'varchar',
+        length: 50
     })
-    name:string;
+    name: string;
 
     @Column({
-        type:'varchar',
-        length:255,
-        unique:true
+        type: 'varchar',
+        length: 255,
+        unique: true
     })
-    email:string;
+    email: string;
 
     @Column({
-        type:'varchar', 
-        length:15, 
-        nullable:true,
-        unique:true
+        type: 'varchar',
+        length: 15,
+        nullable: true,
+        unique: true
     })
-    phone:string
+    phone: string
 
     @Column({
         type: 'text',
         select: false
     })
-    password:string;
+    password: string;
 
     @Column({
         type: 'text',
         array: true,
         default: ['user']
     })
-    roles:string[]
+    roles: string[]
 
     @Column({
         type: 'bool',
@@ -52,9 +53,12 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @OneToMany(() => Business, (businnes) => businnes.owner)
+    business: Business[];
+
     @Exclude()
     @DeleteDateColumn()
-    deletedAt:Date;
+    deletedAt: Date;
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {
@@ -63,6 +67,6 @@ export class User {
 
     @BeforeUpdate()
     checkFieldsBeforeUpdate() {
-            this.checkFieldsBeforeInsert();
+        this.checkFieldsBeforeInsert();
     }
 }
