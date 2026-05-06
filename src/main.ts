@@ -12,16 +12,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist:true,
-      forbidNonWhitelisted:true
+      whitelist: true,
+      forbidNonWhitelisted: true
     })
   );
 
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector))
-    )
+  )
 
-    const config = new DocumentBuilder()
+  const config = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')
     .setVersion('1.0')
@@ -30,7 +30,7 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  const port = configService.get<number>('PORT')?? 3000;
+  const port = configService.get<number>('PORT') ?? 3000;
 
   app.setGlobalPrefix('api')
 

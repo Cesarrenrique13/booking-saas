@@ -9,53 +9,61 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { AuthResponse } from './interfaces/auth-response.interfaces';
 
 @Injectable()
 export class AuthService {
-constructor(
-  private readonly usersService: UsersService,
-  @InjectRepository(User)
-  private readonly authRepository:Repository<User>,
-  private readonly jwtService:JwtService,
-) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @InjectRepository(User)
+    private readonly authRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+  ) { }
 
-  async create(createAuthDto: RegisterUserDto) {
+  async create(createAuthDto: RegisterUserDto):Promise<AuthResponse> {
 
-    const {password, ...userData} = createAuthDto
+    const { password, ...userData } = createAuthDto
 
     const user = await this.usersService.create({
       ...userData,
       password: bcrypt.hashSync(password, 10)
     });
- 
-     return {
-      ...user,
-      token: this.getJwtToken({sub:user.id})
+
+    return {
+      user,
+      token: this.getJwtToken({ sub: user.id }),
     }
   }
 
-  async login(loginUserDto:LoginUserDto) {
-    const {password, email} = loginUserDto;
+  async login(loginUserDto: LoginUserDto):Promise<AuthResponse> {
+    const { password, email } = loginUserDto;
 
     const user = await this.authRepository.findOne({
-      where: {email},
-      select:{email:true, password: true, id:true}
+      where: { email },
+      select: { email: true, password: true, id: true }
     });
-    if (!user){
+    if (!user) {
       throw new UnauthorizedException('Credentials are not valid')
     }
 
-    if (!bcrypt.compareSync (password, user.password) ) {
-        throw new UnauthorizedException('Credentials are not valid')
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw new UnauthorizedException('Credentials are not valid')
     }
 
     return {
-      ...user,
-      token: this.getJwtToken({sub:user.id})
+      user,
+      token: this.getJwtToken({ sub: user.id })
     }
   }
 
-  private getJwtToken(payload:JwtPayload){
+  async checkAuthStatus(user: User):Promise<AuthResponse> {
+    return {
+      user,
+      token: this.getJwtToken({ sub: user.id })
+    }
+  }
+
+  private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }
 }
