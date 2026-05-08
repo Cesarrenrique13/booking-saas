@@ -9,6 +9,6 @@ import { AuthModule } from '@/auth/auth.module';
   imports: [UsersModule, AuthModule],
   controllers: [SeedController],
   providers: [SeedService],
-  exports:[SeedService]
+  exports: [SeedService],
 })
 export class SeedModule {}

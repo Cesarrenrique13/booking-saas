@@ -13,26 +13,25 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true
-    })
+      forbidNonWhitelisted: true,
+    }),
   );
 
-  app.useGlobalInterceptors(
-    new ClassSerializerInterceptor(app.get(Reflector))
-  )
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Booking SaaS API')
+    .setDescription('The booking SaaS API description')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('booking')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
   const port = configService.get<number>('PORT') ?? 3000;
 
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api');
 
   await app.listen(port);
 }

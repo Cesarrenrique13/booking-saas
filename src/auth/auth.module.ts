@@ -23,12 +23,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: '2h'
-        }
-      })
+          expiresIn: '2h',
+        },
+      }),
     }),
   ],
-  exports: [JwtStrategy, PassportModule, JwtModule]
+  exports: [JwtStrategy, PassportModule, JwtModule],
 })
-
-export class AuthModule { }
+export class AuthModule {}

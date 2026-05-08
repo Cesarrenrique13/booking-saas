@@ -10,19 +10,18 @@ import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { BusinessesModule } from './businesses/businesses.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: joinValidationSchema
+      validationSchema: joinValidationSchema,
     }),
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: "postgres",
+        type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: config.get<number>('DB_PORT'),
         username: config.get<string>('DB_USERNAME'),
@@ -30,14 +29,14 @@ import { BusinessesModule } from './businesses/businesses.module';
         database: config.get<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
-        namingStrategy: new SnakeNamingStrategy()
-      })
+        namingStrategy: new SnakeNamingStrategy(),
+      }),
     }),
     UsersModule,
     CommonModule,
     SeedModule,
     AuthModule,
-    BusinessesModule
+    BusinessesModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

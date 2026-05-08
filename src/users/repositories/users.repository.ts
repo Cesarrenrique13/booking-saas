@@ -1,59 +1,59 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { Injectable} from "@nestjs/common";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 
-import { User } from "../entities/user.entity";
-import { DeleteResult, Repository } from "typeorm";
-import { validate as uuidValidate } from "uuid";
+import { User } from '../entities/user.entity';
+import { DeleteResult, Repository } from 'typeorm';
+import { validate as uuidValidate } from 'uuid';
 
 @Injectable()
-export class UserRepository{
-    constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>
-    ){}
+export class UserRepository {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-    async createUser(data:Partial<User>):Promise<User>{
-        const user = this.userRepository.create(data)
-        return this.userRepository.save(user)
-    }
+  async createUser(data: Partial<User>): Promise<User> {
+    const user = this.userRepository.create(data);
+    return this.userRepository.save(user);
+  }
 
-    async findUsers(limit:number, offset:number):Promise<[User[], number]>{
-        return this.userRepository.findAndCount({
-            take:limit,
-            skip:offset
+  async findUsers(limit: number, offset: number): Promise<[User[], number]> {
+    return this.userRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+  }
+
+  async findUser(term: string): Promise<User | null> {
+    let user: User | null;
+
+    if (uuidValidate(term)) {
+      user = await this.userRepository.findOneBy({
+        id: term,
+      });
+    } else {
+      const queryBulder = this.userRepository.createQueryBuilder('user');
+      user = await queryBulder
+        .where('user.email ILIKE :email OR user.phone = :phone', {
+          email: term,
+          phone: term,
         })
+        .getOne();
     }
+    return user;
+  }
 
-    async findUser(term: string):Promise<User | null>{
-        let user: User | null;
+  async updateUser(id: string, data: Partial<User>): Promise<User | null> {
+    const user = await this.userRepository.preload({
+      id,
+      ...data,
+    });
+    if (!user) return null;
 
-        if(uuidValidate(term)) {
-            user = await this.userRepository.findOneBy({
-                id:term
-            });
-        } else {
-            const queryBulder = this.userRepository.createQueryBuilder('user');
-            user = await queryBulder.
-            where('user.email ILIKE :email OR user.phone = :phone', {
-                email: term,
-                phone: term
-            })
-            .getOne();
-        }
-        return user
-    }
+    return this.userRepository.save(user);
+  }
 
-    async updateUser(id:string, data:Partial<User>):Promise<User | null>{
-        const user = await this.userRepository.preload({
-            id,
-            ...data
-        })
-        if(!user) return null
-
-        return this.userRepository.save(user)
-    }
-
-    async deleteUser(id:string):Promise<DeleteResult>{
-        return this.userRepository.softDelete(id)
-    }
+  async deleteUser(id: string): Promise<DeleteResult> {
+    return this.userRepository.softDelete(id);
+  }
 }

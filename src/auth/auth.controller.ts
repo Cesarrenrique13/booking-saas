@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, UseGuards, Headers, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Headers,
+  SetMetadata,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { User } from '@/users/entities/user.entity';
@@ -13,28 +21,23 @@ import { ValidRoles } from './enums/valid_roles.interface';
 import { Auth } from './decorators/auth.decorator';
 import { AuthResponse } from './interfaces/auth-response.interfaces';
 
-
-
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
-  @Post("register")
+  @Post('register')
   register(@Body() createAuthDto: CreateUserDto): Promise<AuthResponse> {
     return this.authService.create(createAuthDto);
   }
 
-  @Post("login")
+  @Post('login')
   loginUser(@Body() loginUserDto: LoginUserDto): Promise<AuthResponse> {
     return this.authService.login(loginUserDto);
   }
 
-
   @Get('check-status')
   @Auth()
-  checkAuthStatus(
-    @GetUser() user: User
-  ): Promise<AuthResponse> {
-    return this.authService.checkAuthStatus(user)
+  checkAuthStatus(@GetUser() user: User): Promise<AuthResponse> {
+    return this.authService.checkAuthStatus(user);
   }
 }

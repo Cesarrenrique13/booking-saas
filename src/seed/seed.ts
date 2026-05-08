@@ -1,18 +1,17 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "@/app.module";
-import { SeedService } from "./seed.service";
-
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '@/app.module';
+import { SeedService } from './seed.service';
 
 async function bootstrap() {
-    const app = await NestFactory.createApplicationContext(AppModule)
+  const app = await NestFactory.createApplicationContext(AppModule);
 
-    const seedService = app.get(SeedService)
+  const seedService = app.get(SeedService);
 
-    console.log('SEED START')
-    await seedService.runSeed()
-    console.log('SEED DONE')
+  console.log('SEED START');
+  await seedService.runSeed();
+  console.log('SEED DONE');
 
-    await app.close()
+  await app.close();
 }
 
-bootstrap()
+bootstrap();
