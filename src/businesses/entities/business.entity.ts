@@ -1,6 +1,9 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -68,13 +71,35 @@ export class Business {
   @Column({ type: 'uuid' })
   userId: string;
 
+  @Column({ type: 'varchar', length: 120, unique: true })
+  slug: string;
+
   @ManyToOne(() => User, (user) => user.businesses)
   @JoinColumn({ name: 'user_id' })
   owner: User;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  generateSlug() {
+    const slug = this.name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
+    this.slug = slug;
+  }
+
+  @BeforeUpdate()
+  slugifyUpdate() {
+    this.generateSlug();
+  }
 }
