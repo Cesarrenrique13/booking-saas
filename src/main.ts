@@ -31,7 +31,7 @@ async function bootstrap() {
 
   const port = configService.get<number>('PORT') ?? 3000;
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('booking');
 
   await app.listen(port);
 }

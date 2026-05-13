@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '../entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -10,7 +10,7 @@ export class UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async createUser(data: Partial<User>): Promise<User> {
     const user = this.userRepository.create(data);
@@ -43,12 +43,12 @@ export class UserRepository {
     return user;
   }
 
-  async updateUser(id: string, data: Partial<User>): Promise<User | null> {
+  async updateUser(id: string, data: Partial<User>): Promise<User> {
     const user = await this.userRepository.preload({
       id,
       ...data,
     });
-    if (!user) return null;
+    if (!user) throw new NotFoundException('User not found');;
 
     return this.userRepository.save(user);
   }

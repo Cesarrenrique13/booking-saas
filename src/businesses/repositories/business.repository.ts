@@ -11,7 +11,7 @@ export class BusinessRepository {
     private readonly businessRepository: Repository<Business>,
   ) {}
 
-  async createBusiness(data: Business): Promise<Business> {
+  async createBusiness(data: Partial<Business>): Promise<Business> {
     const business = this.businessRepository.create(data);
     return this.businessRepository.save(business);
   }
@@ -60,6 +60,11 @@ export class BusinessRepository {
   }
 
   async deleteBusiness(id: string): Promise<DeleteResult> {
-    return this.businessRepository.softDelete(id);
+    const result = await this.businessRepository.softDelete(id)
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Business not found`)
+    }
+    return result
   }
 }

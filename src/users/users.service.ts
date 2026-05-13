@@ -52,15 +52,9 @@ export class UsersService {
 
   async update(id: string, data: UpdateUserDto): Promise<User> {
     try {
-      const user = await this.userRepository.updateUser(id, data);
-      if (!user) {
-        throw new NotFoundException(`User with id: ${id} not found`);
-      }
-
-      return user;
+      return await this.userRepository.updateUser(id, data);
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
-
       return this.handleDBExceptions(error);
     }
   }

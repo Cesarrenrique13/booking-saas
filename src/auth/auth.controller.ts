@@ -11,15 +11,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from '@/users/dto/create-user.dto';
 import { User } from '@/users/entities/user.entity';
 import { LoginUserDto } from './dto';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorators/get-user.decorator';
-import { RawHeaders } from '@/common/decorators/raw-headers.decorator';
-import type { IncomingHttpHeaders } from 'http';
-import { UserRoleGuard } from './guards/user-role/user-role.guard';
-import { RoleProtected } from './decorators/role-protected.decorator';
-import { ValidRoles } from './enums/valid_roles.interface';
 import { Auth } from './decorators/auth.decorator';
-import { AuthResponse } from './interfaces/auth-response.interfaces';
+import type { AuthResponse } from './interfaces/auth-response.interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +31,7 @@ export class AuthController {
 
   @Get('check-status')
   @Auth()
-  checkAuthStatus(@GetUser() user: User): Promise<AuthResponse> {
+  heckAuthStatus(@GetUser() user: User): AuthResponse {
     return this.authService.checkAuthStatus(user);
   }
 }
