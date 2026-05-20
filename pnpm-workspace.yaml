@@ -1,0 +1,6 @@
+allowedDeprecatedVersions: {}
+allowBuilds:
+  '@nestjs/core': true
+  '@scarf/scarf': false
+  bcrypt: true
+  unrs-resolver: true

@@ -23,14 +23,17 @@ export class BusinessesController {
 
   @Post()
   @Auth()
-  async create(@Body() createBusinessDto: CreateBusinessDto,
-  @GetUser() user:User
-):Promise<Business> {
+  async create(
+    @Body() createBusinessDto: CreateBusinessDto,
+    @GetUser() user: User,
+  ): Promise<Business> {
     return this.businessesService.create(createBusinessDto, user);
   }
 
   @Get()
-  findAll(@Query() pagination:PaginationDto):Promise<PaginationInterface<Business>> {
+  findAll(
+    @Query() pagination: PaginationDto,
+  ): Promise<PaginationInterface<Business>> {
     return this.businessesService.findAll(pagination);
   }
 
@@ -44,14 +47,18 @@ export class BusinessesController {
   update(
     @Param('id') id: string,
     @Body() updateBusinessDto: UpdateBusinessDto,
-  ):Promise<Business> {
-    return this.businessesService.update(id, updateBusinessDto);
+    @GetUser() user: User,
+  ): Promise<Business> {
+    return this.businessesService.update(id, updateBusinessDto, user);
   }
 
   @Delete(':id')
   @Auth()
-  async remove(@Param('id') id: string):Promise<{Message:string}> {
-    await this.businessesService.remove(id);
-    return {Message: 'Business deleted sucessfully'}
+  async remove(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<{ Message: string }> {
+    await this.businessesService.remove(id, user);
+    return { Message: 'Business deleted sucessfully' };
   }
 }

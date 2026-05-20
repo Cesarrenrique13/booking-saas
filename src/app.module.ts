@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { BusinessesModule } from './businesses/businesses.module';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { BusinessesModule } from './businesses/businesses.module';
     SeedModule,
     AuthModule,
     BusinessesModule,
+    ServicesModule,
   ],
 })
 export class AppModule {}

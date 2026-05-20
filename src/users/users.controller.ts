@@ -6,12 +6,10 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
-  Post,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PaginationDto } from 'src/common/pagination/pagination.dto';
 import { User } from './entities/user.entity';
 import { PaginationInterface } from 'src/common/pagination/pagination.interface';

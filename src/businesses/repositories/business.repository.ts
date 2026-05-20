@@ -17,12 +17,12 @@ export class BusinessRepository {
   }
 
   async findBusinesses(
-    skip: number,
     take: number,
+    skip: number,
   ): Promise<[Business[], number]> {
     return this.businessRepository.findAndCount({
-      skip,
       take,
+      skip,
       relations: { owner: true },
       where: { isActive: true },
       order: {
@@ -60,11 +60,11 @@ export class BusinessRepository {
   }
 
   async deleteBusiness(id: string): Promise<DeleteResult> {
-    const result = await this.businessRepository.softDelete(id)
+    const result = await this.businessRepository.softDelete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Business not found`)
+      throw new NotFoundException(`Business not found`);
     }
-    return result
+    return result;
   }
 }
