@@ -99,8 +99,9 @@ pnpm start:dev
 | GET | `/booking/users` | ❌ | Listar usuarios |
 | POST | `/booking/businesses` | ✅ | Crear negocio |
 | GET | `/booking/businesses` | ❌ | Listar negocios |
-| POST | `/booking/services` | ✅ | Crear servicio |
+| POST | `/booking/services/:businessId` | ✅ | Crear servicio |
 | GET | `/booking/services` | ❌ | Listar servicios |
+| GET | `/booking/services/:term` | ❌ | Buscar por UUID o nombre |
 | PATCH | `/booking/services/:id` | ✅ | Actualizar servicio |
 | DELETE | `/booking/services/:id` | ✅ | Eliminar servicio |
 
