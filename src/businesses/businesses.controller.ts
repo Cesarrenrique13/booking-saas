@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { BusinessesService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
@@ -23,14 +24,17 @@ export class BusinessesController {
 
   @Post()
   @Auth()
-  async create(@Body() createBusinessDto: CreateBusinessDto,
-  @GetUser() user:User
-):Promise<Business> {
+  async create(
+    @Body() createBusinessDto: CreateBusinessDto,
+    @GetUser() user: User,
+  ): Promise<Business> {
     return this.businessesService.create(createBusinessDto, user);
   }
 
   @Get()
-  findAll(@Query() pagination:PaginationDto):Promise<PaginationInterface<Business>> {
+  findAll(
+    @Query() pagination: PaginationDto,
+  ): Promise<PaginationInterface<Business>> {
     return this.businessesService.findAll(pagination);
   }
 
@@ -42,16 +46,20 @@ export class BusinessesController {
   @Patch(':id')
   @Auth()
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBusinessDto: UpdateBusinessDto,
-  ):Promise<Business> {
-    return this.businessesService.update(id, updateBusinessDto);
+    @GetUser() user: User,
+  ): Promise<Business> {
+    return this.businessesService.update(id, updateBusinessDto, user);
   }
 
   @Delete(':id')
   @Auth()
-  async remove(@Param('id') id: string):Promise<{Message:string}> {
-    await this.businessesService.remove(id);
-    return {Message: 'Business deleted sucessfully'}
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser() user: User,
+  ): Promise<{ Message: string }> {
+    await this.businessesService.remove(id, user);
+    return { Message: 'Business deleted successfully' };
   }
 }

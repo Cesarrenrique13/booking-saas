@@ -37,7 +37,7 @@ export class BusinessRepository {
     if (uuidValidate(term)) {
       business = await this.businessRepository.findOne({
         where: { id: term, isActive: true },
-        relations: { owner: true },
+        relations: { owner: true, services: true },
       });
     } else {
       const queryBuilder =
@@ -60,11 +60,11 @@ export class BusinessRepository {
   }
 
   async deleteBusiness(id: string): Promise<DeleteResult> {
-    const result = await this.businessRepository.softDelete(id)
+    const result = await this.businessRepository.softDelete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Business not found`)
+      throw new NotFoundException(`Business not found`);
     }
-    return result
+    return result;
   }
 }

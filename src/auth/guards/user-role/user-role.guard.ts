@@ -8,6 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -26,7 +27,7 @@ export class UserRoleGuard implements CanActivate {
       return true;
     }
 
-    const req = context.switchToHttp().getRequest();
+    const req = context.switchToHttp().getRequest<Request>();
     const user = req.user as User;
 
     if (!user) {
@@ -40,7 +41,7 @@ export class UserRoleGuard implements CanActivate {
     }
 
     throw new ForbiddenException(
-      `User ${user.name} need a valid role: [${validRoles}]`,
+      `User ${user.name} need a valid role: [${validRoles.join(', ')}]`,
     );
   }
 }
