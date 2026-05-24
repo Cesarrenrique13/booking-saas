@@ -7,11 +7,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BusinessCategory } from '../enums/business-category.enum';
 import { User } from '@/users/entities/user.entity';
+import { Service } from '@/services/entities/service.entity';
 
 @Entity('businesses')
 export class Business {
@@ -77,6 +79,9 @@ export class Business {
   @ManyToOne(() => User, (user) => user.businesses)
   @JoinColumn({ name: 'user_id' })
   owner: User;
+
+  @OneToMany(() => Service, (service) => service.business)
+  services: Service[];
 
   @DeleteDateColumn()
   deletedAt: Date;

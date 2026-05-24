@@ -37,7 +37,7 @@ export class BusinessRepository {
     if (uuidValidate(term)) {
       business = await this.businessRepository.findOne({
         where: { id: term, isActive: true },
-        relations: { owner: true },
+        relations: { owner: true, services: true },
       });
     } else {
       const queryBuilder =

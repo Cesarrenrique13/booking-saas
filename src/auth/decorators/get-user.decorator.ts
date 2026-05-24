@@ -6,6 +6,12 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
+declare module 'express' {
+  interface Request {
+    user?: User;
+  }
+}
+
 export const GetUser = createParamDecorator(
   (data: keyof User, ctx: ExecutionContext) => {
     const req = ctx.switchToHttp().getRequest<Request>();

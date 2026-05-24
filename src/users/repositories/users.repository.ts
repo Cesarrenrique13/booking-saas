@@ -10,7 +10,7 @@ export class UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async createUser(data: Partial<User>): Promise<User> {
     const user = this.userRepository.create(data);
@@ -48,7 +48,7 @@ export class UserRepository {
       id,
       ...data,
     });
-    if (!user) throw new NotFoundException('User not found');;
+    if (!user) throw new NotFoundException('User not found');
 
     return this.userRepository.save(user);
   }

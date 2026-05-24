@@ -10,5 +10,6 @@ import { AuthModule } from '@/auth/auth.module';
   controllers: [BusinessesController],
   providers: [BusinessesService, BusinessRepository],
   imports: [TypeOrmModule.forFeature([Business]), AuthModule],
+  exports: [BusinessesService],
 })
 export class BusinessesModule {}

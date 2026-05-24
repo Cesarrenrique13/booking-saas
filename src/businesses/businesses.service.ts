@@ -37,7 +37,7 @@ export class BusinessesService {
   ): Promise<PaginationInterface<Business>> {
     const { limit = 10, page = 1 } = pagination;
     const skip = (page - 1) * limit;
-    const [data, total] = await this.businessRepo.findBusinesses(limit, skip);
+    const [data, total] = await this.businessRepo.findBusinesses(skip, limit);
     return {
       data,
       total,
@@ -65,9 +65,10 @@ export class BusinessesService {
 
     if (business.owner.id !== user.id) {
       throw new ForbiddenException(
-        'You are not allowed to update this business',
+        'You do not have permission to update this business',
       );
     }
+
     try {
       return await this.businessRepo.updateBusiness(id, data);
     } catch (error) {
@@ -81,9 +82,10 @@ export class BusinessesService {
 
     if (business.owner.id !== user.id) {
       throw new ForbiddenException(
-        'You are not allowed to delete this business',
+        'You do not have permission to delete this business',
       );
     }
+
     try {
       await this.businessRepo.deleteBusiness(id);
     } catch (err) {

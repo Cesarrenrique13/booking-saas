@@ -4,11 +4,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { JoinColumn } from 'typeorm/browser';
-import { ManyToOne } from 'typeorm/browser';
-import { PrimaryGeneratedColumn } from 'typeorm/browser';
 
 @Entity('services')
 export class Service {
@@ -17,7 +17,7 @@ export class Service {
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: 100,
   })
   name: string;
 
@@ -28,26 +28,38 @@ export class Service {
   description: string;
 
   @Column({
-    type: 'int',
-    unsigned: true,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
   })
   price: number;
 
   @Column({
-    type: 'uuid',
+    type: 'int',
   })
+  durationMinutes: number;
+
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  isActive: boolean;
+
+  @Column({ type: 'uuid' })
   businessId: string;
 
-  @ManyToOne(() => Business, (business) => business.services)
-  @JoinColumn({ name: 'user_service' })
+  @ManyToOne(() => Business, (business) => business.services, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'business_id' })
   business: Business;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }

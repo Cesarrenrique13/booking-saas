@@ -1,34 +1,134 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Booking SaaS API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para un sistema de reservas multi-negocio construida con NestJS.  
+Diseñada con **Clean Architecture**, aplicando **Repository Pattern**, **validación de propiedad (IDOR Prevention)** y **autenticación JWT con roles**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-# Booking API
+## Stack
 
-1. Clonar proyecto
-2. ```pnpm install```
-3. Clonar el archivo ```.env.template``` y renombralo a ```.env```
-4. Cambiar las variables de entorno 
-5. Levantar la base de datos
+| Capa | Tecnología |
+|---|---|
+| Framework | NestJS 11 |
+| ORM | TypeORM 0.3 |
+| Base de datos | PostgreSQL 17 |
+| Autenticación | JWT (Passport) + Roles |
+| Documentación | Swagger (OpenAPI) |
+| Contenedores | Docker + Docker Compose |
+| Lenguaje | TypeScript (strict mode) |
+
+---
+
+## Features
+
+- **Autenticación JWT** con registro, login y refresh de token
+- **Roles de usuario**: `user`, `admin`, `super-user`
+- **CRUD completo** de usuarios, negocios y servicios
+- **Paginación unificada** en todos los listados
+- **Soft delete** en todas las entidades
+- **Validación de propiedad (IDOR Prevention)**: cada usuario solo puede modificar sus propios recursos
+- **Repositorio personalizado** desacopla la lógica de negocio del ORM
+- **Documentación Swagger** en `/api`
+- **Seed de datos** con 300 usuarios falsos + administrador
+
+---
+
+## Arquitectura
+
 ```
+Cliente → Controller → Service → Repository → TypeORM → PostgreSQL
+                              ↘
+                      DTO Validation (class-validator)
+                              ↘
+                      Auth Guard + Role Guard + Ownership
+```
+
+Cada módulo sigue el patrón **Controller → Service → Repository**:
+
+| Capa | Responsabilidad |
+|---|---|
+| **Controller** | Recibe la request, aplica guards y pipes |
+| **Service** | Lógica de negocio, validaciones de ownership |
+| **Repository** | Persistencia, consultas a la base de datos |
+
+---
+
+## Quick Start
+
+```bash
+# 1. Clonar
+git clone <tu-repo>
+cd booking-saas
+
+# 2. Instalar dependencias
+pnpm install
+
+# 3. Configurar variables de entorno
+cp .env.template .env
+# Editar .env con tus valores
+
+# 4. Levantar PostgreSQL
 docker compose up -d
+
+# 5. Iniciar en modo desarrollo
+pnpm start:dev
+
+# 6. Documentación Swagger
+# Abrir http://localhost:3000/api
 ```
-6. levantar modo desarollo: ```pnpm start:dev```
+
+## Comandos
+
+| Comando | Descripción |
+|---|---|
+| `pnpm start:dev` | Dev con hot-reload |
+| `pnpm build` | Compila a `dist/` |
+| `pnpm lint` | ESLint + Prettier --fix |
+| `pnpm test` | Tests unitarios (Jest) |
+| `pnpm test:e2e` | Tests end-to-end |
+| `pnpm seed` | Poblar DB con datos de prueba |
+
+---
+
+## Endpoints principales
+
+| Método | Ruta | Auth | Descripción |
+|---|---|---|---|
+| POST | `/booking/auth/register` | ❌ | Registrar usuario |
+| POST | `/booking/auth/login` | ❌ | Iniciar sesión |
+| GET | `/booking/users` | ❌ | Listar usuarios |
+| POST | `/booking/businesses` | ✅ | Crear negocio |
+| GET | `/booking/businesses` | ❌ | Listar negocios |
+| POST | `/booking/services` | ✅ | Crear servicio |
+| GET | `/booking/services` | ❌ | Listar servicios |
+| PATCH | `/booking/services/:id` | ✅ | Actualizar servicio |
+| DELETE | `/booking/services/:id` | ✅ | Eliminar servicio |
+
+---
+
+## Módulos
+
+| Módulo | Estado | Patrón |
+|---|---|---|
+| `auth/` | ✅ Completo | JWT + Guards |
+| `users/` | ✅ Completo | Repository Pattern |
+| `businesses/` | ✅ Completo | Repository + Ownership |
+| `services/` | ✅ Completo | Repository + Ownership |
+| `seed/` | ✅ Completo | CLI + HTTP |
+
+---
+
+## Próximos pasos
+
+- [ ] Tests unitarios y de integración
+- [ ] CI/CD con GitHub Actions
+- [ ] Motor de reservas (Bookings)
+- [ ] Pasarela de pagos (Stripe)
+- [ ] Despliegue en la nube
+
+---
+
+## Autor
+
+**César Salazar** — Backend Developer  
+[GitHub](https://github.com/Cesarrnerique13) · [LinkedIn](https://www.linkedin.com/in/cesar-salazar-223956368/)

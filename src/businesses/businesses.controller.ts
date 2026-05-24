@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { BusinessesService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
@@ -45,7 +46,7 @@ export class BusinessesController {
   @Patch(':id')
   @Auth()
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBusinessDto: UpdateBusinessDto,
     @GetUser() user: User,
   ): Promise<Business> {
@@ -55,10 +56,10 @@ export class BusinessesController {
   @Delete(':id')
   @Auth()
   async remove(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
   ): Promise<{ Message: string }> {
     await this.businessesService.remove(id, user);
-    return { Message: 'Business deleted sucessfully' };
+    return { Message: 'Business deleted successfully' };
   }
 }
