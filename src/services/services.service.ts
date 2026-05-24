@@ -26,15 +26,21 @@ export class ServicesService {
     private readonly businessesService: BusinessesService,
   ) {}
 
-  async create(data: CreateServiceDto, user: User): Promise<Service> {
-    const business = await this.businessesService.findOne(data.businessId);
+  async create(
+    businessId: string,
+    data: CreateServiceDto,
+    user: User,
+  ): Promise<Service> {
+    const business = await this.businessesService.findOne(businessId);
 
     if (business.userId !== user.id) {
       throw new ForbiddenException('You do not own this business');
     }
 
+    const serviceData = { ...data, businessId };
+
     try {
-      return await this.serviceRepository.createService(data);
+      return await this.serviceRepository.createService(serviceData);
     } catch (error) {
       this.handleDBExceptions(error);
     }

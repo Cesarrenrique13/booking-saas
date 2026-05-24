@@ -26,13 +26,14 @@ import { PaginationInterface } from '@/common/pagination/pagination.interface';
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
-  @Post()
+  @Post(':businessId')
   @Auth()
   create(
+    @Param('businessId', ParseUUIDPipe) businessId: string,
     @Body() createServiceDto: CreateServiceDto,
     @GetUser() user: User,
   ): Promise<Service> {
-    return this.servicesService.create(createServiceDto, user);
+    return this.servicesService.create(businessId, createServiceDto, user);
   }
 
   @Get()

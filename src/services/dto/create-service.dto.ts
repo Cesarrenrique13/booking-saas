@@ -7,7 +7,6 @@ import {
   IsOptional,
   IsPositive,
   IsString,
-  IsUUID,
   Max,
   MaxLength,
   Min,
@@ -38,10 +37,6 @@ export class CreateServiceDto {
   @Min(5)
   @Max(1440)
   durationMinutes: number;
-
-  @IsUUID()
-  @IsNotEmpty()
-  businessId: string;
 
   @IsBoolean()
   @IsOptional()
