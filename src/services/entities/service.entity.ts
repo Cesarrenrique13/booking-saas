@@ -28,9 +28,8 @@ export class Service {
   description: string;
 
   @Column({
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
+    type: 'int',
+    unsigned: true,
   })
   price: number;
 
