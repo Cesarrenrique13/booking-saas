@@ -1,3 +1,4 @@
+import { Booking } from '@/bookings/entities/booking.entity';
 import { Business } from '@/businesses/entities/business.entity';
 import { Exclude } from 'class-transformer';
 import {
@@ -65,6 +66,9 @@ export class User {
 
   @OneToMany(() => Business, (businnes) => businnes.owner)
   businesses: Business[];
+
+  @OneToMany(() => Booking, (booking) => booking.user)
+  bookings: Booking[];
 
   @Exclude()
   @DeleteDateColumn()

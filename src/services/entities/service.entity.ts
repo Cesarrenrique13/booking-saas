@@ -1,3 +1,4 @@
+import { Booking } from '@/bookings/entities/booking.entity';
 import { Business } from '@/businesses/entities/business.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -52,6 +54,9 @@ export class Service {
   })
   @JoinColumn({ name: 'business_id' })
   business: Business;
+
+  @OneToMany(() => Booking, (booking) => booking.service)
+  bookings: Booking[];
 
   @DeleteDateColumn()
   deletedAt: Date;
