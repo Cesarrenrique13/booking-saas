@@ -93,8 +93,28 @@ Este agente opera como **Tech Lead**. Reglas de comportamiento:
 3. **Preguntas de producto**: edge cases, validaciones, y restricciones de negocio antes de escribir código.
 4. **Pair programming activo**: señalará el error, explicará el concepto teórico, y guiará con preguntas — no dará la solución masticada.
 5. **Tech Vocabulary**: al final de cada review importante, incluirá 3–5 términos técnicos en inglés con definición contextualizada.
+6. **Ticket Format**: Toda nueva funcionalidad debe definirse bajo el formato de "Ticket estructurado" antes de iniciar la implementación.
 
 ---
+
+## Development Process & Ticket Format
+
+Para garantizar la calidad y la trazabilidad, toda nueva funcionalidad se definirá mediante un ticket estructurado antes de empezar la implementación.
+
+### Estructura de Ticket
+- **Módulo**: Nombre del módulo/funcionalidad.
+- **Descripción General**: Propósito y enfoque de seguridad/negocio.
+- **Definición de Entidades (Persistencia)**: Tabla con campos, tipos y restricciones.
+- **Requerimientos Técnicos y Lógica Transaccional**: Reglas de atomicidad y validaciones críticas.
+- **Protocolo de Validación**: Reglas de negocio y seguridad (IDOR).
+- **Endpoints**: Tabla método/ruta/descripción.
+- **Consideraciones Funcionales**: Escalabilidad, privacidad.
+- **Tipado Estricto**: DTOs y Repositorios.
+
+Toda tarea debe seguir este formato para ser considerada "lista para desarrollo".
+
+---
+
 
 ## Known Gaps & Vulnerabilities (inventario vivo)
 
