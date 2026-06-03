@@ -49,6 +49,7 @@ export class SeedService {
       email: 'admin@booking.com',
       phone: '04' + faker.string.numeric(8),
       password: passwordCrypt,
+      roles: ['admin', 'super-user'],
     };
 
     const entities = [adminUser, ...users];
