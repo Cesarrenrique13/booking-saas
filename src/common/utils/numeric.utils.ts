@@ -6,10 +6,10 @@ export function isValidNumber(value: unknown): boolean {
 }
 
 export function toNumber(value: unknown, fallback = 0): number {
-  if (value === undefined || value === null || value === 'object')
+  if (value === undefined || value === null || typeof value === 'object')
     return fallback;
 
-  const parsed = parseFloat(String(value));
+  const parsed = parseFloat(String(value as string | number | boolean));
 
   return Number.isNaN(parsed) ? fallback : parsed;
 }

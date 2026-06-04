@@ -10,6 +10,7 @@ import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { BusinessesModule } from './businesses/businesses.module';
 import { ServicesModule } from './services/services.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ServicesModule } from './services/services.module';
     AuthModule,
     BusinessesModule,
     ServicesModule,
+    BookingsModule,
   ],
 })
 export class AppModule {}

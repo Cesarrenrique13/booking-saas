@@ -8,7 +8,7 @@ import {
   Patch,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { PaginationDto } from 'src/common/pagination/pagination.dto';
 import { User } from './entities/user.entity';
@@ -21,6 +21,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all users (paginated)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated users' })
   findAll(
     @Query() pagination: PaginationDto,
   ): Promise<PaginationInterface<User>> {
@@ -28,11 +30,15 @@ export class UsersController {
   }
 
   @Get(':term')
+  @ApiOperation({ summary: 'Get a user by ID or email' })
+  @ApiResponse({ status: 200, description: 'Returns user' })
   findOne(@Param('term') term: string): Promise<User> {
     return this.usersService.findOne(term);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a user' })
+  @ApiResponse({ status: 200, description: 'User updated successfully' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() data: UpdateUserDto,
@@ -41,6 +47,8 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<{ message: string }> {
