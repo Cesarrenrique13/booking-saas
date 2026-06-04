@@ -23,6 +23,7 @@ import { BookingsModule } from './bookings/bookings.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
+        ssl: process.env.STAGE === 'prod',
         type: 'postgres',
         host: config.get<string>('DB_HOST'),
         port: config.get<number>('DB_PORT'),
