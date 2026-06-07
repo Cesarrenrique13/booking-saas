@@ -20,7 +20,7 @@ export class SeedService {
   }
 
   private async insertUsers() {
-    const passwordCrypt = bcrypt.hashSync('1234567', 10);
+    const passwordCrypt = bcrypt.hashSync('Abc12345', 10);
 
     const users = Array.from({ length: 300 }).map(() => {
       const fullName = faker.person.fullName();
